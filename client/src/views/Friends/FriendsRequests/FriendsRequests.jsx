@@ -6,15 +6,17 @@ import { FriendsUserProfileSection } from "../FriendsUserProfileSection";
 import { useAvailableFriendRequestsQuery } from "../../../store/services/friendService.js";
 
 const FriendsRequestsPage = () => {
+  //   TODO: додати запит, який повертатиме список людей з запитами на дружбу
+
   const userId = localStorage.getItem("userId");
 
-  const { data: friends } = useAvailableFriendRequestsQuery(userId);
+  const { data: requests } = useAvailableFriendRequestsQuery(userId);
 
   return (
     <Stack width="100%" direction="row" height="calc(100vh - 54px)">
       <FriendsSubSidebar
         variant="requests"
-        users={friends}
+        users={requests}
         heading="Friend Requests"
         subTitle="Friend Requests"
       />
