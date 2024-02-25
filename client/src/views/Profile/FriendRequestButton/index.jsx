@@ -18,7 +18,6 @@ const FriendRequestButton = ({ isPersonalProfile, profile, id }) => {
   const isIncomingFriendRequest = profile?.friendStatus === "REQUEST_SENT";
   const haveSentFriendRequest = profile?.friendStatus === "REQUEST_RECEIVED";
 
-  console.log(profile);
   if (isPersonalProfile) {
     return null;
   }

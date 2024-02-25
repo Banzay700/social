@@ -13,7 +13,7 @@ export const usersApi = createApi({
   },
   endpoints: (builder) => ({
     getUsers: builder.query({
-      query: () => `users`,
+      query: (page = 0, size = 10) => `users?page=${page}&size=${size}`,
       providesTags: (result, error) => [{ type: "Users" }],
     }),
   }),

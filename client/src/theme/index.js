@@ -44,7 +44,6 @@ export const theme = createTheme({
     text: {
       base: "#050505",
       grey: "#6a6d71",
-
       white: "#fff",
     },
     error: {

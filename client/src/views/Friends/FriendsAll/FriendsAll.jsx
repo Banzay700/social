@@ -2,10 +2,14 @@ import { Stack } from "@mui/material";
 
 import { FriendsSubSidebar } from "../../../components/sidebars";
 import { withLayout } from "../../../hooks/withLayout";
-import { friends } from "../../../mock";
 import { FriendsUserProfileSection } from "../FriendsUserProfileSection";
+import { useGetFriendsListQuery } from "../../../store/services/friendService.js";
 
 const FriendsAllPage = () => {
+  const userId = localStorage.getItem("userId");
+
+  const { data: friends } = useGetFriendsListQuery(userId);
+
   return (
     <Stack width="100%" direction="row" height="calc(100vh - 54px)">
       <FriendsSubSidebar
