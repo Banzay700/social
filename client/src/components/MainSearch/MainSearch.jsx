@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { ActionIconButton } from "../index";
 import { MainSearchItem } from "./MainSearchItem";
@@ -14,13 +15,28 @@ import {
   SearchMenu,
   SearchWrapper,
 } from "./MainSearch.styled";
+import { useClickOutside } from "../../hooks/index.js";
 
-const MainSearch = ({ any }) => {
+const MainSearch = ({ value, searchItems, onChange }) => {
   const [inputActive, setInputActive] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleBlur = () => {
     setInputActive(false);
+    onChange("");
+  };
+
+  const handleGoToUser = (id) => {
+    if (id) {
+      navigate(`/profile/${id}`);
+    }
+  };
+
+  const inputRef = useClickOutside(handleBlur);
+
+  const handleChange = ({ target }) => {
+    onChange(target.value);
   };
 
   useEffect(() => {
@@ -35,7 +51,7 @@ const MainSearch = ({ any }) => {
   }, [inputActive]);
 
   return (
-    <SearchWrapper open={inputActive}>
+    <SearchWrapper open={inputActive} ref={inputRef}>
       <LogoContainer open={inputActive}>
         <LogoHiddenContentWrapper open={inputActive}>
           <LogoLink to="/" open={inputActive}>
@@ -49,20 +65,22 @@ const MainSearch = ({ any }) => {
       <SearchContainer>
         <SearchIcon open={inputActive} />
         <SearchBase
+          value={value}
           onFocus={() => setInputActive(!inputActive)}
-          onBlur={handleBlur}
+          onChange={(e) => handleChange(e)}
           placeholder="Search Isocial"
         />
       </SearchContainer>
-      {menuOpen && (
+      {menuOpen && searchItems && (
         <SearchMenu>
-          <MainSearchItem variant="history" fullName="John Doe" />
-          <MainSearchItem variant="search" fullName="Adam Smith" />
-          <MainSearchItem
-            variant="search"
-            fullName="Adam Smith"
-            avatarUrl="https://i.pravatar.cc/300?u=591"
-          />
+          {searchItems?.map(({ id, firstName, lastName }) => (
+            <MainSearchItem
+              key={id}
+              variant="search"
+              fullName={`${firstName} ${lastName}`}
+              onClick={() => handleGoToUser(id)}
+            />
+          ))}
         </SearchMenu>
       )}
     </SearchWrapper>
@@ -70,7 +88,8 @@ const MainSearch = ({ any }) => {
 };
 
 MainSearch.propTypes = {
-  any: PropTypes.any,
+  searchItems: PropTypes.array,
+  onChange: PropTypes.func,
 };
 
 MainSearch.displayName = "MainSearch";

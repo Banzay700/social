@@ -18,8 +18,8 @@ export const friendsApi = profileApi.injectEndpoints({
         };
       },
       invalidatesTags: (result, error, { userId }) => [
-        { type: "Friends", id: userId },
-        { type: "Profile", id: userId },
+        { type: "Friends" },
+        { type: "Profile" },
       ],
     }),
     removeFriend: builder.mutation({
@@ -68,6 +68,7 @@ export const friendsApi = profileApi.injectEndpoints({
     }),
     cancelFriendRequest: builder.mutation({
       query: ({ userId }) => {
+        console.log(userId);
         return {
           url: `friends/cancelFriendRequest?friendId=${userId}`,
           method: "POST",
@@ -81,10 +82,7 @@ export const friendsApi = profileApi.injectEndpoints({
     }),
     availableFriendRequests: builder.query({
       query: (id) => `friends/availableFriendRequests?userId=${id}`,
-      providesTags: (id) => [
-        { type: "Friends", id },
-        { type: "Profile", id },
-      ],
+      providesTags: (id) => [{ type: "Friends" }, { type: "Profile" }],
     }),
   }),
 });

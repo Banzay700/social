@@ -5,11 +5,21 @@ import NotificationButton from "./actions/NotificationButton";
 import AvatarButton from "./actions/AvatarButton";
 import { MainSearch } from "../../MainSearch";
 import styles from "./navbar.module.scss";
+import { useGetUserByNameQuery } from "../../../store/services/usersService.js";
+import { useState } from "react";
 
 const Navbar = () => {
+  const [value, setValue] = useState("");
+
+  const { data } = useGetUserByNameQuery(value, { skip: value === "" });
+
+  const handleChange = (value) => {
+    setValue(value);
+  };
+
   return (
     <header className={styles.header}>
-      <MainSearch />
+      <MainSearch value={value} searchItems={data} onChange={handleChange} />
 
       <nav className={styles.navWrapper}>
         <ul className={styles.navLinkList}>

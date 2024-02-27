@@ -8,6 +8,10 @@ import { FriendsSidebarUserCard } from "../../friends-page-components";
 import { SidebarSearch } from "../../index";
 import { SidebarItemsList, SidebarWrapper } from "./FriendsSubSidebar.styled";
 import { useSearchParams } from "react-router-dom";
+import {
+  useAcceptFriendRequestMutation,
+  useCancelFriendRequestMutation,
+} from "../../../store/services/friendService.js";
 
 const FriendsSubSidebar = ({
   variant,
@@ -19,6 +23,17 @@ const FriendsSubSidebar = ({
   const [searchValue, setSearchValue] = useState("");
   let [searchParams, setSearchParams] = useSearchParams();
 
+  const [acceptFriendRequest] = useAcceptFriendRequestMutation();
+  const [cancelFriendRequest] = useCancelFriendRequestMutation();
+
+  if (!Array.isArray(users)) {
+    return (
+      <SidebarWrapper>
+        <SubSidebarHeader heading={heading} link={PATH.FRIENDS} />
+      </SidebarWrapper>
+    );
+  }
+
   const filteredUsers = users?.filter((user) => {
     return (
       user.firstName.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -26,12 +41,16 @@ const FriendsSubSidebar = ({
     );
   });
 
-  const handleChange = (value) => {
-    setSearchValue(value);
+  const handleChange = (value) => setSearchValue(value);
+  const handleChooseUser = (id) => setSearchParams({ id });
+  const handleDeleteRequest = (e, id) => {
+    console.log(id);
+    e.stopPropagation();
+    cancelFriendRequest({ userId: id });
   };
-
-  const handleChooseUser = (id) => {
-    setSearchParams({ id });
+  const handleConfirmRequest = (e, id) => {
+    e.stopPropagation();
+    acceptFriendRequest({ userId: 2 });
   };
 
   return (
@@ -60,6 +79,8 @@ const FriendsSubSidebar = ({
               userImage={avatar}
               fullName={`${firstName} ${lastName}`}
               variant={variant}
+              onConfirm={(e) => handleConfirmRequest(id)}
+              onDelete={(e) => handleDeleteRequest(e, id)}
               onClick={() => handleChooseUser(id)}
             />
           ))}
@@ -74,7 +95,7 @@ FriendsSubSidebar.propTypes = {
   variant: PropTypes.oneOf(["friends", "requests"]),
   subTitle: PropTypes.string,
   heading: PropTypes.string,
-  users: PropTypes.array,
+  users: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
 };
 
 FriendsSubSidebar.displayName = "FriendsSubSidebar";

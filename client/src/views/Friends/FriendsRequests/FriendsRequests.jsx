@@ -8,18 +8,19 @@ import { useAvailableFriendRequestsQuery } from "../../../store/services/friendS
 const FriendsRequestsPage = () => {
   //   TODO: додати запит, який повертатиме список людей з запитами на дружбу
 
-  const userId = localStorage.getItem("userId");
+  const { data: requests } = useAvailableFriendRequestsQuery();
 
-  const { data: requests } = useAvailableFriendRequestsQuery(userId);
-
+  console.log(requests);
   return (
     <Stack width="100%" direction="row" height="calc(100vh - 54px)">
-      <FriendsSubSidebar
-        variant="requests"
-        users={requests}
-        heading="Friend Requests"
-        subTitle="Friend Requests"
-      />
+      {requests && (
+        <FriendsSubSidebar
+          variant="requests"
+          users={requests}
+          heading="Friend Requests"
+          subTitle="Friend Requests"
+        />
+      )}
       <FriendsUserProfileSection />
     </Stack>
   );

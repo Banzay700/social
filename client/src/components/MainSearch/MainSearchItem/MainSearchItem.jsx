@@ -3,11 +3,11 @@ import { SearchItemWrapper } from "./MainSearchItem.styled";
 import { ActionIconButton } from "../../index";
 import { Stack, Avatar, Typography, useTheme } from "@mui/material";
 
-const MainSearchItem = ({ variant, fullName, avatarUrl }) => {
+const MainSearchItem = ({ variant, fullName, avatarUrl, onClick }) => {
   const { palette } = useTheme();
 
   return (
-    <SearchItemWrapper>
+    <SearchItemWrapper onClick={onClick}>
       {variant === "search" && !avatarUrl && (
         <ActionIconButton
           bg={palette.background.greyHover}
@@ -38,6 +38,7 @@ MainSearchItem.propTypes = {
   variant: PropTypes.oneOf(["history", "search"]),
   fullName: PropTypes.string,
   avatarUrl: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 MainSearchItem.displayName = "MainSearchItem";

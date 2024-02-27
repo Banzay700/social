@@ -3,6 +3,7 @@ import { instance } from "../../api/config";
 
 export const profileApi = createApi({
   reducerPath: "profileApi",
+  tagTypes: ["Profile"],
   baseQuery: async (args) => {
     try {
       const response = await instance(args);

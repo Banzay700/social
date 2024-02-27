@@ -193,14 +193,29 @@ public class FriendService implements IFriendService {
     return friendRepository.countAllNonAcceptedFriends(userRepository.findById(userId).orElseThrow());
   }
 
+  @Transactional
   @Override
-  public List<FriendResponseDto> availableFriendRequests(Long userId) {
-    return userRepository.findById(userId).map(user ->
-      friendRepository.findAllByAddresserAndStatus(user, UserFriendStatus.REQUEST_RECEIVED).stream()
-        .map(Friend::getRequester)
-        .map(friendResponseMapper::convertToDto)
-        .collect(Collectors.toList())
-    ).orElse(Collections.emptyList());
+  public List<FriendResponseDto> availableFriendRequests() throws EntityNotFoundException {
+    long userId = emailPasswordAuthProvider.getAuthenticationPrincipal();
+    Optional<User> user = userRepository.findById(userId);
+
+    if (!user.isPresent()) {
+      throw new EntityNotFoundException("User not found");
+    }
+
+    List<Friend> friendRequests = friendRepository.findByAddresserAndStatusAndIsActive(user.get(),
+            UserFriendStatus.REQUEST_SENT, true);
+    return friendRequests.stream()
+            .map(friend -> {
+              User addresser = friend.getAddresser();
+              return new FriendResponseDto(
+                      friend.getId(),
+                      addresser.getFirstName(),
+                      addresser.getLastName(),
+                      addresser.getAvatarsUrl()
+              );
+            })
+            .collect(Collectors.toList());
   }
 
 

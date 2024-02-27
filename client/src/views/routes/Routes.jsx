@@ -40,10 +40,6 @@ const router = createBrowserRouter([
     errorElement: <ErrorFallback />,
   },
   {
-    path: "profile/:id",
-    element: <Profile />
-  },
-  {
     path: "settings",
     element: <Settings />,
     errorElement: <ErrorFallback />,
@@ -52,8 +48,8 @@ const router = createBrowserRouter([
     path: PATH.FRIENDS,
     element: <Friends />,
     errorElement: <ErrorFallback />,
-	},
-	{
+  },
+  {
     path: PATH.FRIENDS_REQUESTS,
     element: <FriendsRequests />,
   },
@@ -88,7 +84,7 @@ const router = createBrowserRouter([
   {
     path: "forgot-password/:id",
     element: <UpdatePassword />,
-  }
+  },
 ]);
 
 export const App = () => <RouterProvider router={router} />;

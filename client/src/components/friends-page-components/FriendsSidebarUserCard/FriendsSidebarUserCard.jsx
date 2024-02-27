@@ -19,7 +19,6 @@ const FriendsSidebarUserCard = ({
   onClick,
 }) => {
   const isRequestVariant = variant === "requests";
-
   return (
     <CardWrapper variant={variant} onClick={onClick}>
       <Stack direction="row" gap="8px" alignItems="center">

@@ -26,7 +26,7 @@ export const LogoHiddenContentWrapper = styled(Stack)(({ open }) => ({
 }));
 
 export const SearchWrapper = styled(Stack)(({ open }) => ({
-  paddingRight: "8px",
+  padding: "7px 8px 7px 0",
   flexDirection: "row",
   gap: open ? "2px" : "8px",
   maxWidth: "360px",
@@ -71,7 +71,7 @@ export const SearchContainer = styled(Stack)(({ theme }) => ({
 export const SearchMenu = styled(Stack)(({ theme }) => ({
   position: "absolute",
   width: "100%",
-  top: "39px",
+  top: "52px",
   left: "0",
   gap: "4px",
   backgroundColor: theme.palette.white,

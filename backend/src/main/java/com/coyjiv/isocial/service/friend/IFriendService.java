@@ -22,7 +22,7 @@ public interface IFriendService {
 
   Long getSubscribersCount(Long userId);
 
-  List<FriendResponseDto> availableFriendRequests(Long userId);
+  List<FriendResponseDto> availableFriendRequests() throws EntityNotFoundException;
 
   UserFriendStatus getFriendStatus(Long id, Long authenticationPrincipal);
 

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -103,12 +104,14 @@ public class FriendController {
   }
 
   @GetMapping("/availableFriendRequests")
-  public ResponseEntity<List<FriendResponseDto>> availableFriendRequests(@RequestParam Long userId) {
-    if (userId == null) {
-      return ResponseEntity.badRequest().body(null);
+  public ResponseEntity<?> availableFriendRequests() throws EntityNotFoundException {
+    List<FriendResponseDto> friendRequests = friendService.availableFriendRequests();
+    if (friendRequests.isEmpty()) {
+      return ResponseEntity.ok("No friend requests");
     }
-    return ResponseEntity.ok(friendService.availableFriendRequests(userId));
+    return ResponseEntity.ok(friendRequests);
   }
+
 
 
 }

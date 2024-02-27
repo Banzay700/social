@@ -9,9 +9,7 @@ import { UserCard } from "../../../components/index.js";
 
 const FriendsMainContent = () => {
   const { data, isLoading } = useGetUsersQuery();
-
   console.log(data);
-
   return (
     <MainContentWrapper>
       <Stack alignItems="center" gap="15px">
