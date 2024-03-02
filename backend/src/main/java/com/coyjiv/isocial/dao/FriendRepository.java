@@ -48,7 +48,8 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
   @Query("SELECT COUNT(f) FROM Friend f WHERE f.requester.id = :userId AND f.status = :status")
   Long countByRequesterAndStatus(@Param("userId") Long userId, @Param("status") UserFriendStatus status);
 
-  List<Friend> findByAddresserAndStatusAndIsActive(User user, UserFriendStatus status,  boolean isActive);
+  Page<Friend> findByAddresserAndStatusAndIsActive(User addresser, UserFriendStatus status,
+                                                   boolean isActive, Pageable pageable);
 
 }
 

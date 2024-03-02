@@ -6,6 +6,7 @@ import com.coyjiv.isocial.dao.UserRepository;
 import com.coyjiv.isocial.domain.Friend;
 import com.coyjiv.isocial.domain.User;
 import com.coyjiv.isocial.domain.UserFriendStatus;
+import com.coyjiv.isocial.dto.respone.friend.CustomFriendResponse;
 import com.coyjiv.isocial.dto.respone.friend.FriendResponseDto;
 import com.coyjiv.isocial.exceptions.EntityNotFoundException;
 import com.coyjiv.isocial.transfer.friend.FriendResponseMapper;
@@ -19,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -194,8 +194,7 @@ public class FriendService implements IFriendService {
   }
 
   @Transactional
-  @Override
-  public List<FriendResponseDto> availableFriendRequests() throws EntityNotFoundException {
+  public CustomFriendResponse availableFriendRequests(Integer page, Integer size) throws EntityNotFoundException {
     long userId = emailPasswordAuthProvider.getAuthenticationPrincipal();
     Optional<User> user = userRepository.findById(userId);
 
@@ -203,20 +202,30 @@ public class FriendService implements IFriendService {
       throw new EntityNotFoundException("User not found");
     }
 
-    List<Friend> friendRequests = friendRepository.findByAddresserAndStatusAndIsActive(user.get(),
-            UserFriendStatus.REQUEST_SENT, true);
-    return friendRequests.stream()
-            .map(friend -> {
-              User addresser = friend.getAddresser();
-              return new FriendResponseDto(
-                      friend.getId(),
-                      addresser.getFirstName(),
-                      addresser.getLastName(),
-                      addresser.getAvatarsUrl()
-              );
-            })
-            .collect(Collectors.toList());
+    Sort sort = Sort.by(new Sort.Order(Sort.Direction.ASC, "id"));
+    Pageable pageable = PageRequest.of(page, size, sort);
+
+    Page<Friend> friendRequests = friendRepository.findByAddresserAndStatusAndIsActive(user.get(),
+            UserFriendStatus.REQUEST_SENT, true, pageable);
+
+    List<FriendResponseDto> content = friendRequests.map(friend -> {
+      User requester = friend.getRequester();
+      return new FriendResponseDto(
+              requester.getId(),
+              requester.getFirstName(),
+              requester.getLastName(),
+              requester.getAvatarsUrl()
+      );
+    }).getContent();
+
+    boolean hasNext = friendRequests.hasNext();
+
+    return new CustomFriendResponse(content, hasNext);
   }
+
+
+
+
 
 
   public UserFriendStatus getFriendStatus(Long currentUserId, Long otherUserId) {

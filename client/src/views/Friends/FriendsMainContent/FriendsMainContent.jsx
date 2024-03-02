@@ -1,46 +1,36 @@
 import { Divider, Stack } from "@mui/material";
 
-import { FriendsList } from "./FriendsList";
+import { FriendsList } from "../../../components/friends-page-components";
 import { PATH } from "../../../utils/constants";
-import { friends } from "../../../mock";
+import {
+  useAvailableFriendRequestsQuery,
+  useGetFriendsListQuery,
+} from "../../../store/services/friendService";
 import { MainContentWrapper } from "./FriendsMainContent.styled";
-import { useGetUsersQuery } from "../../../store/services/usersService.js";
-import { UserCard } from "../../../components/index.js";
 
 const FriendsMainContent = () => {
-  const { data, isLoading } = useGetUsersQuery();
-  console.log(data);
+  const id = localStorage.getItem("userId");
+  const { data: friends, isLoading } = useGetFriendsListQuery(id);
+  const { data: requests } = useAvailableFriendRequestsQuery();
+
   return (
     <MainContentWrapper>
-      <Stack alignItems="center" gap="15px">
-        {data?.map(({ id, firstName, lastName, ...user }) => (
-          <UserCard
-            key={id}
-            id={id}
-            fullName={`${firstName} ${lastName}`}
-            {...user}
-          />
-        ))}
-      </Stack>
+      <Stack alignItems="center" gap="15px"></Stack>
       <FriendsList
         variant="requests"
-        users={data}
-        heading="Users you may know"
-        link={PATH.FRIENDS_REQUESTS}
-      />
-      <Divider orientation="horizontal" />
-      <FriendsList
-        variant="requests"
-        users={friends}
+        users={requests?.content}
+        isLoading={isLoading}
         heading="Friend Requests"
         link={PATH.FRIENDS_REQUESTS}
       />
+
       <Divider orientation="horizontal" />
       <FriendsList
         variant="friends"
         users={friends}
+        isLoading={isLoading}
         heading="All Friends"
-        link="https://google.com"
+        link={PATH.FRIENDS}
       />
     </MainContentWrapper>
   );

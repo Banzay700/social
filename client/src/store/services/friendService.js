@@ -68,7 +68,6 @@ export const friendsApi = profileApi.injectEndpoints({
     }),
     cancelFriendRequest: builder.mutation({
       query: ({ userId }) => {
-        console.log(userId);
         return {
           url: `friends/cancelFriendRequest?friendId=${userId}`,
           method: "POST",

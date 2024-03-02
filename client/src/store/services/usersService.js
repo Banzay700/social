@@ -16,13 +16,7 @@ export const usersApi = createApi({
       query: (page = 0, size = 10) => `users?page=${page}&size=${size}`,
       providesTags: (result, error) => [{ type: "Users" }],
     }),
-    getUserByName: builder.query({
-      query: (name, page = 0, size = 10) => {
-        return `users/search?name=${name}&page=${page}&size=${size}`;
-      },
-      keepUnusedDataFor: 0,
-    }),
   }),
 });
 
-export const { useGetUsersQuery, useGetUserByNameQuery } = usersApi;
+export const { useGetUsersQuery } = usersApi;
