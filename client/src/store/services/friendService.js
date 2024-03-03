@@ -17,17 +17,14 @@ export const friendsApi = profileApi.injectEndpoints({
           method: "POST",
         };
       },
-      invalidatesTags: (result, error, { userId }) => [
-        { type: "Friends" },
-        { type: "Profile" },
-      ],
+      invalidatesTags: () => [{ type: "Friends" }, { type: "Profile" }],
     }),
     removeFriend: builder.mutation({
-      query: ({ userId }) => {
+      query: ({ friendId }) => {
         return {
-          url: `friends?friendId=${userId}`,
+          url: `friends?friendId=${friendId}`,
           method: "DELETE",
-          data: { userId },
+          data: { friendId },
         };
       },
       invalidatesTags: (result, error, { userId }) => [
@@ -36,9 +33,9 @@ export const friendsApi = profileApi.injectEndpoints({
       ],
     }),
     acceptFriendRequest: builder.mutation({
-      query: ({ userId }) => {
+      query: ({ friendId }) => {
         return {
-          url: `friends/accept?friendId=${userId}`,
+          url: `friends/accept?friendId=${friendId}`,
           method: "POST",
         };
       },
@@ -48,9 +45,9 @@ export const friendsApi = profileApi.injectEndpoints({
       ],
     }),
     declineFriendRequest: builder.mutation({
-      query: ({ userId }) => {
+      query: ({ friendId }) => {
         return {
-          url: `friends/decline?friendId=${userId}`,
+          url: `friends/decline?friendId=${friendId}`,
           method: "POST",
         };
       },

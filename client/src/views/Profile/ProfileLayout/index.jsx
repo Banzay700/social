@@ -60,7 +60,6 @@ export const ProfileLayout = ({ id }) => {
   if (isLoading) {
     return <ProfileSkeleton />;
   }
-  console.log(profile);
 
   return (
     <>

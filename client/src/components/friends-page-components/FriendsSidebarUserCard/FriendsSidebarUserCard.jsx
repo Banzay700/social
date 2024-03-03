@@ -15,6 +15,7 @@ const FriendsSidebarUserCard = ({
   fullName,
   onConfirm,
   onDelete,
+  onRemove,
   onMessage,
   onClick,
 }) => {
@@ -35,7 +36,7 @@ const FriendsSidebarUserCard = ({
           {!isRequestVariant && (
             <CardActionsPopover
               name={fullName}
-              onRemove={onDelete}
+              onRemove={onRemove}
               onMessage={onMessage}
             />
           )}
@@ -61,6 +62,7 @@ FriendsSidebarUserCard.propTypes = {
   onConfirm: PropTypes.func,
   onDelete: PropTypes.func,
   onClick: PropTypes.func,
+  onRemove: PropTypes.func,
 };
 
 FriendsSidebarUserCard.displayName = "FriendsSidebarUserCard";

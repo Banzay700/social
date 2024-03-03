@@ -12,7 +12,8 @@ import {
 import { SidebarSearch } from "../../index";
 import {
   useAcceptFriendRequestMutation,
-  useCancelFriendRequestMutation,
+  useDeclineFriendRequestMutation,
+  useRemoveFriendMutation,
 } from "../../../store/services/friendService";
 import { SidebarItemsList, SidebarWrapper } from "./FriendsSubSidebar.styled";
 
@@ -28,7 +29,8 @@ const FriendsSubSidebar = ({
   let [searchParams, setSearchParams] = useSearchParams();
 
   const [acceptFriendRequest] = useAcceptFriendRequestMutation();
-  const [cancelFriendRequest] = useCancelFriendRequestMutation();
+  const [declineFriendRequest] = useDeclineFriendRequestMutation();
+  const [removeFriend] = useRemoveFriendMutation();
 
   if (isLoading) {
     return (
@@ -68,13 +70,21 @@ const FriendsSubSidebar = ({
 
   const handleChange = (value) => setSearchValue(value);
   const handleChooseUser = (id) => setSearchParams({ id });
-  const handleDeleteRequest = (e, id) => {
+  const handleDeclineRequest = (e, id) => {
     e.stopPropagation();
-    cancelFriendRequest({ userId: id });
+    declineFriendRequest({ friendId: id });
   };
   const handleConfirmRequest = (e, id) => {
     e.stopPropagation();
-    acceptFriendRequest({ userId: 2 });
+    acceptFriendRequest({ friendId: id });
+  };
+
+  const handleRemoveFriend = (id) => {
+    removeFriend({ friendId: id });
+  };
+
+  const handleOpenMessage = (id) => {
+    console.log(`start messages with user ${id}`);
   };
 
   return (
@@ -103,9 +113,11 @@ const FriendsSubSidebar = ({
               userImage={avatarsUrl}
               fullName={`${firstName} ${lastName}`}
               variant={variant}
-              onConfirm={(e) => handleConfirmRequest(id)}
-              onDelete={(e) => handleDeleteRequest(e, id)}
+              onConfirm={(e) => handleConfirmRequest(e, id)}
+              onDelete={(e) => handleDeclineRequest(e, id)}
               onClick={() => handleChooseUser(id)}
+              onRemove={() => handleRemoveFriend(id)}
+              onMessage={() => handleOpenMessage(id)}
             />
           ))}
         </Stack>
